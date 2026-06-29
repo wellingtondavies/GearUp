@@ -1,0 +1,69 @@
+/* ------------------------------------------------PADDING------------------------------------------------------------------------- */
+.py-base {
+    padding-block: var(--py-base);
+}
+
+.py-lg {
+    padding-block: var(--py-lg);
+}
+
+.py-xl {
+    padding-block: var(--py-xl);
+}
+
+.px-lg {
+    padding-inline: var(--px-lg);
+}
+
+/* ------------------------------------------------SOMENTE DESKTOP------------------------------------------------------------------ */
+.desktop-only {
+    display: none;
+}
+
+
+
+/* ------------------------------------------------LAYOUT------------------------------------------------------------------------- */
+
+.even-columns {
+    display: grid;
+    gap: 1rem;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+}
+
+.items-center {
+    align-items: center;
+}
+.justify-between {
+    justify-content: space-between;
+}
+
+.flex {
+    display: flex;
+}
+
+.grid {
+    display: grid;
+}
+
+/* ------------------------------------------------LAYOUT------------------------------------------------------------------------- */
+.gap-1 {
+    gap: 1rem;
+}
+
+.gap-1\.5 {
+    gap: 1.5rem;
+}
+
+.btn-wrapper {
+    cursor: pointer;
+    padding: 2px;
+}
+
+/* ------------------------------------------------CONTAINER----------------------------------------------------------------------- */
+    .container {
+        --max-width: 1050px;
+        width: min(var(--max-width), 100% - var(--px-lg) * 2);
+        margin-inline: auto;
+    }
+

@@ -1,5 +1,15 @@
-import { render } from 'preact'
-import './index.css'
-import { App } from './app.tsx'
+import { render } from "preact";
+import { Router } from "preact-router";
 
-render(<App />, document.getElementById('app')!)
+import "./styles/index.css";
+
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+
+render(
+  <Router>
+    <Home path="/" />
+    <Login path="/login" />
+  </Router>,
+  document.getElementById("root")!
+);

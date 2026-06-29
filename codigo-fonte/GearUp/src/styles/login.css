@@ -1,0 +1,130 @@
+main{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+main .caixas{
+    overflow-x:visible ;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.content{
+    background-color: rgba(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    flex: 4;
+    align-items: start;
+    gap: 1rem;
+    padding-block: 3rem;
+}
+
+/* #F9CF1C */
+button{
+    padding: 0.5rem;
+    background-color: #2C3E50;
+    border: 0.15rem solid transparent;
+    border-radius: .75rem;
+    min-width: 25rem;
+    font-size: 1rem;
+    font-weight: var(--fw-bold);
+    color: white;
+}
+
+button{
+    transition: .3s;
+}
+
+button:hover{
+    background: white;
+    border: 0.15rem solid #2C3E50;
+    color: #2C3E50;
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.title p{
+    color: #6B7280;
+    font-size: .95rem;
+    line-height: 1.5;
+    margin-top: .8rem;
+}
+
+.title h1{
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.title h2{
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.content img{
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.information{
+    display: flex;
+    flex-direction: column;
+    flex: 5.5;
+    padding-block: 4rem;
+    padding-inline: 3rem;
+    align-items: start;
+    gap: 2rem;
+}
+
+.content form{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: center;
+    gap: 1.5rem;
+    width: 100%;
+    border-radius: 0.75rem;
+}
+
+.content input{
+    padding: 0.3rem;
+    border: none;
+    border-bottom: #2C3E50 solid 0.20rem;
+    min-width: 25rem;
+    outline: none;
+}
+
+.content input ::placeholder{
+    color: #2C3E50;
+
+}
+
+.content p{
+    padding-top: 0;
+    
+}
+
+.content a{
+    color: #F9CF1C;
+    text-decoration: none;
+}
+
+.image{
+    flex: 6;
+    display: flex;
+}
+
+.image img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    filter: brightness(80%);
+}
+
+

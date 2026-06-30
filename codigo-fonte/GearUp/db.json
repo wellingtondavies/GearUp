@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "nome": "Wellington",
+      "email": "wellington@email.com"
+    }
+  ],
+
+  "items": [
+    {
+      "id": 1,
+      "titulo": "Furadeira Bosch",
+      "descricao": "Excelente estado",
+      "categoria": "Ferramentas",
+      "valorDia": 45,
+      "cidade": "Londrina",
+      "disponivel": true
+    },
+    {
+      "id": 2,
+      "titulo": "Escada",
+      "descricao": "6 metros",
+      "categoria": "Construção",
+      "valorDia": 35,
+      "cidade": "Cambé",
+      "disponivel": true
+    }
+  ]
+}

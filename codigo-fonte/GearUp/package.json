@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "json-server --watch db.json --port 3001"
   },
   "dependencies": {
     "preact": "^10.29.1",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@preact/preset-vite": "^2.10.5",
     "@types/node": "^24.12.2",
+    "json-server": "^1.0.0-beta.15",
     "typescript": "~6.0.2",
     "vite": "^8.0.4"
   }

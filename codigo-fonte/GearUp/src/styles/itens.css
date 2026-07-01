@@ -1,0 +1,75 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    background-color: #2C3E50;
+    width: min(1050px, 100% - 1.5rem * 2);
+    margin-inline: auto;
+    margin-bottom: 5rem;
+    padding: 0.75rem;
+    border-bottom-right-radius: .75rem;
+    border-bottom-left-radius: .75rem;
+
+}
+
+.perfil-usuario{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem
+}
+
+.perfil-usuario p{
+    color: white;
+}
+
+.perfil-usuario img{
+    border-radius: 50%;
+}
+
+.container2{
+    width: min(1050px, 100% - 1.5rem * 2);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.title-itens{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    border-bottom: #2C3E5020 solid 2px;
+}
+
+.title-itens h1{
+    font-size: 2.5rem;
+    color: #2C3E50;
+}
+
+.title-itens button{
+    padding: auto;
+    padding-inline: 5px;
+    width: fit-content;
+    background-color: #2C3E50;
+    border: 0.15rem solid transparent;
+    border-radius: .75rem;
+    font-size: 1rem;
+    font-weight: var(--fw-bold);
+    color: white;
+    transition: .3s;
+    height: 2rem;
+    
+}
+
+.title-itens button:hover{
+    background: white;
+    border: 0.15rem solid #2C3E50;
+    color: #2C3E50;
+}
+
+.cards-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 1rem;
+    padding-inline: 0.5rem;
+}

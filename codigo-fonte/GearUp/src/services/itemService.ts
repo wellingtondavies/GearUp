@@ -14,8 +14,10 @@ export async function getItems(): Promise<Item[]> {
 }
 
 // Buscar um item por ID
-export async function getItemById(id: number): Promise<Item> {
-  const response = await fetch(`${API}/${id}`);
+export async function getItemById(id: number | string): Promise<Item> {
+  const idFormatado = String(id).trim();
+
+  const response = await fetch(`${API}/${idFormatado}`);
 
   if (!response.ok) {
     throw new Error("Item não encontrado");
@@ -42,19 +44,19 @@ export async function createItem(item: Omit<Item, "id">): Promise<Item> {
 }
 
 // Atualizar um item inteiro
-export async function updateItem(id: number, item: Item): Promise<Item> {
+export async function updateItem(
+  id: number | string,
+  item: Item,
+): Promise<Item> {
   const response = await fetch(`${API}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(item),
   });
 
   if (!response.ok) {
     throw new Error("Erro ao atualizar item");
   }
-
   return response.json();
 }
 
@@ -79,12 +81,12 @@ export async function patchItem(
 }
 
 // Excluir um item
-export async function deleteItem(id: number): Promise<void> {
+export async function deleteItem(id: number | string): Promise<void> {
   const response = await fetch(`${API}/${id}`, {
     method: "DELETE",
   });
 
   if (!response.ok) {
-    throw new Error("Erro ao excluir item");
+    throw new Error("Erro ao deletar item");
   }
 }

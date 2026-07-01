@@ -24,9 +24,9 @@ const Login = (props: RoutableProps) => {
           </form>
 
           <div>
-            <button className="criarConta"
-              onClick={() => route("/Itens")}
-            >Entrar</button>
+            <button className="criarConta" onClick={() => route("/Itens")}>
+              Entrar
+            </button>
             <p className="login-text">
               Não tem uma conta?{" "}
               <button

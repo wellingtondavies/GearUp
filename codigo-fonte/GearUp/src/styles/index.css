@@ -2,10 +2,10 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-*{
+* {
   margin: 0;
   padding: 0;
   font: inherit;
@@ -15,76 +15,70 @@
 
 /* ---------------------------------------------------------ROOT------------------------------------------------------------------ */
 :root {
+  --ff-sans: "Montserrat", system-ui, sans-serif;
+  --fw-base: 400;
+  --fw-md: 500;
+  --fw-bold: 800;
 
-    --ff-sans: "Montserrat", system-ui, sans-serif;
-    --fw-base: 400;
-    --fw-md: 500;
-    --fw-bold: 800;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 2rem;
+  --fs-xl: 2.625rem;
+  --fs-2xl: 4rem;
 
-    
-    --fs-sm: 0.875rem;
-    --fs-base: 1rem;
-    --fs-lg: 2rem;
-    --fs-xl: 2.625rem;
-    --fs-2xl: 4rem;
-    
-    --py-sm: 1rem;
-    --py-base: 1.5rem;
-    --py-lg: 2.5rem;
-    --py-xl: 5rem;
-    --pg-lg: 2rem;
+  --py-sm: 1rem;
+  --py-base: 1.5rem;
+  --py-lg: 2.5rem;
+  --py-xl: 5rem;
+  --pg-lg: 2rem;
 }
-
 
 /* ---------------------------------------------------------HTML------------------------------------------------------------------ */
 html {
-    font-family: var(--ff-sans);
-    font-weight: var(--fw-base);
-    font-size: var(--fs-base);
-    line-height: 1.6;
-    color: var(--text-color);
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+  font-family: var(--ff-sans);
+  font-weight: var(--fw-base);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text-color);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
-
 
 /* ---------------------------------------------------------BODY------------------------------------------------------------------ */
 body {
-    background-color: var(--bg-color);
-    overflow-x: hidden;
+  background-color: var(--bg-color);
+  overflow-x: hidden;
 }
 
 /* ---------------------------------------------------------TITULOS----------------------------------------------------------------- */
-h1, h2, h3 {
-    line-height: 1.2;
-    color: var(--text-color);
-    font-weight: var(--fw-bold);
-    letter-spacing: -0.04em;
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  color: var(--text-color);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.04em;
 }
 
 h1 {
-    font-size: var(--fs-2xl);
+  font-size: var(--fs-2xl);
 }
 
 h2 {
-    font-size: var(--fs-xl);
+  font-size: var(--fs-xl);
 }
 
 h3 {
-    font-size: var(--fs-lg);
+  font-size: var(--fs-lg);
 }
-
-/* ---------------------------------------------------------LINKS------------------------------------------------------------------ */
-
 
 /* ---------------------------------------------------------IMAGEM------------------------------------------------------------------ */
 img {
-    max-width: 100%;
-    display: inline-block;
+  max-width: 100%;
+  display: inline-block;
 }
 
 /* ---------------------------------------------------------UL------------------------------------------------------------------ */
 ul {
-    list-style: none;
+  list-style: none;
 }
-

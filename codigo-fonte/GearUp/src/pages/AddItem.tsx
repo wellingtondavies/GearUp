@@ -39,8 +39,6 @@ const AddItem = (_props: RoutableProps) => {
         titulo,
         descricao,
         valorDia: Number(valorDia),
-        categoria: "Geral",
-        cidade: "Não informada",
         disponivel: true,
       });
 

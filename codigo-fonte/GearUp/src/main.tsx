@@ -11,7 +11,7 @@ render(
   <Router>
     <Home path="/" />
     <Login path="/login" />
-    <Itens path="/Itens" />
+    <Itens path="/itens" />
     <AddItem path="/anuncio/novo" />
     <EditItem path="/anuncio/editar/:id" />
   </Router>,

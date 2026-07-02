@@ -3,9 +3,8 @@ import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import "../styles/home.css";
 import "../styles/utility.css";
-import logo from "../assets/svgs/logo.svg";
 
-const Login = (props: RoutableProps) => {
+const Login = (_props: RoutableProps) => {
   return (
     <main className="sing-in">
       <section className="content">
@@ -24,7 +23,7 @@ const Login = (props: RoutableProps) => {
           </form>
 
           <div>
-            <button className="criarConta" onClick={() => route("/Itens")}>
+            <button className="criarConta" onClick={() => route("/itens")}>
               Entrar
             </button>
             <p className="login-text">

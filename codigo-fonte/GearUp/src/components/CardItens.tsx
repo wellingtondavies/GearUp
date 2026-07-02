@@ -1,23 +1,41 @@
-import '../styles/cardItens.css'
+import "../styles/cardItens.css";
 
-interface CardItensProps{
+interface CardItensProps {
     imagem: string;
     titulo: string;
     valor: number;
+    onEdit?: () => void;
+    onDelete?: () => void;
 }
 
-export default function CardItens({imagem, titulo, valor}: CardItensProps){
-
-    return(
-        <div className='card'>
-                    <img src={imagem} alt=""  />
-                    <div className='card-information'>
-                        <h2>{titulo}</h2>
-                        <span>
-                            <p>R${valor},00</p>
-                            <button> + </button>
-                        </span>                    
+export default function CardItens({
+    imagem,
+    titulo,
+    valor,
+    onEdit,
+    onDelete,
+}: CardItensProps) {
+    return (
+        <div className="card">
+            <img src={imagem} alt={titulo} />
+            <div className="card-information">
+                <h2>{titulo}</h2>
+                <span>
+                    <p>R${valor},00</p>
+                    <div className="card-actions">
+                        <button type="button" onClick={onEdit} aria-label="Editar item">
+                            Editar
+                        </button>
+                        <button
+                            type="button"
+                            onClick={onDelete}
+                            aria-label="Remover item"
+                        >
+                            Excluir
+                        </button>
                     </div>
-                </div>
-    )
+                </span>
+            </div>
+        </div>
+    );
 }

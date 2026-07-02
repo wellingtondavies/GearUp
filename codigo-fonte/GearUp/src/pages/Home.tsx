@@ -6,7 +6,7 @@ import "../styles/utility.css";
 // import type { FunctionComponent } from "preact";
 // import logo from "../assets/svgs/logo.svg";
 
-const Home = (props: RoutableProps) => {
+const Home = (_props: RoutableProps) => {
   return (
     <main className="sing-in">
       <section className="content">

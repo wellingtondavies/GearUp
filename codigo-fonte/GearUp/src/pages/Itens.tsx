@@ -1,16 +1,69 @@
+import { useEffect, useState } from "preact/hooks";
+import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
-// import { route } from "preact-router";
 
-import parafusadeira2 from "../assets/images/parafusadeira2.jpg";
+import caixasImg from "../assets/images/caixas.png";
+import parafusadeiraImg from "../assets/images/parafusadeira.jpg";
+import parafusadeira2Img from "../assets/images/parafusadeira2.jpg";
 import usuario from "../assets/images/iconeusuario.jpg";
 import logo from "../assets/svgs/logo.svg";
 
 import CardItens from "../components/CardItens";
+import { deleteItem, getItems } from "../services/itemService";
+import type { Item } from "../types/item";
 
 import "../styles/itens.css";
 import "../styles/utility.css";
 
-const Itens = (props: RoutableProps) => {
+const Itens = (_props: RoutableProps) => {
+  const [itens, setItens] = useState<Item[]>([]);
+  const [carregando, setCarregando] = useState(true);
+
+  const getFallbackImage = (titulo: string) => {
+    const tituloNormalizado = titulo.trim().toLowerCase();
+
+    if (tituloNormalizado.includes("parafusadeira")) {
+      return parafusadeira2Img;
+    }
+
+    if (tituloNormalizado.includes("caixa")) {
+      return caixasImg;
+    }
+
+    return parafusadeiraImg;
+  };
+
+  useEffect(() => {
+    getItems()
+      .then((dados) => setItens(dados))
+      .catch((error) => {
+        console.error(error);
+        alert("Não foi possível carregar os anúncios.");
+      })
+      .finally(() => setCarregando(false));
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    const confirmar = globalThis.confirm(
+      "Tem certeza de que deseja remover este anúncio?",
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    try {
+      await deleteItem(id);
+      setItens((itensAtuais) =>
+        itensAtuais.filter((item) => item.id !== id),
+      );
+      alert("Anúncio removido com sucesso!");
+    } catch (error) {
+      console.error(error);
+      alert("Não foi possível remover o anúncio.");
+    }
+  };
+
   return (
     <>
       <header>
@@ -29,25 +82,28 @@ const Itens = (props: RoutableProps) => {
         <div className="title-itens">
           <h1>Meus Anúncios</h1>
 
-          <button>Novo Anúncio +</button>
+          <button type="button" onClick={() => route("/anuncio/novo")}>
+            Novo Anúncio +
+          </button>
         </div>
 
         <section className="cards-grid">
-          <CardItens
-            imagem={parafusadeira2}
-            titulo="Parafusadeira"
-            valor={50}
-          />
-          <CardItens
-            imagem={parafusadeira2}
-            titulo="Parafusadeira"
-            valor={50}
-          />
-          <CardItens
-            imagem={parafusadeira2}
-            titulo="Parafusadeira"
-            valor={50}
-          />
+          {carregando ? (
+            <p>Carregando anúncios...</p>
+          ) : itens.length > 0 ? (
+            itens.map((item) => (
+              <CardItens
+                key={item.id}
+                imagem={item.imagem || getFallbackImage(item.titulo)}
+                titulo={item.titulo}
+                valor={item.valorDia}
+                onEdit={() => route(`/anuncio/editar/${item.id}`)}
+                onDelete={() => handleDelete(item.id)}
+              />
+            ))
+          ) : (
+            <p>Nenhum anúncio cadastrado.</p>
+          )}
         </section>
       </main>
     </>

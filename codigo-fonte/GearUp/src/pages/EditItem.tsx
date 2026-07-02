@@ -67,7 +67,7 @@ export default function EditItem(props: Readonly<EditItemProps>) {
       await updateItem(props.id, itemAtualizado);
 
       alert("Alterações salvas com sucesso!");
-      route("/");
+      route("/itens");
     } catch (error) {
       console.error(error);
       alert("Não foi possível atualizar o anúncio.");
@@ -84,7 +84,7 @@ export default function EditItem(props: Readonly<EditItemProps>) {
       try {
         await deleteItem(props.id);
         alert("Anúncio removido com sucesso!");
-        route("/");
+        route("/itens");
       } catch (error) {
         console.error(error);
         alert("Erro ao tentar excluir.");

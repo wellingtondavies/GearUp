@@ -5,7 +5,7 @@ import { createItem } from "../services/itemService";
 import "../styles/add-item.css";
 import "../styles/utility.css";
 
-const AddItem = (props: RoutableProps) => {
+const AddItem = (_props: RoutableProps) => {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [valorDia, setValorDia] = useState("");

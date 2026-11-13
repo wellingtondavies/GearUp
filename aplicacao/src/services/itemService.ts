@@ -1,92 +1,61 @@
-import type { Item } from "../types/item.ts";
+import { API_URL } from "../config";
+import type { Item, NovoItem } from "../types/item";
 
-const API = "http://localhost:3001/items";
+const ITEMS_URL = `${API_URL}/items`;
 
-// Buscar todos os itens
-export async function getItems(): Promise<Item[]> {
-  const response = await fetch(API);
-
-  if (!response.ok) {
-    throw new Error("Erro ao buscar itens");
-  }
-
-  return response.json();
-}
-
-// Buscar um item por ID
-export async function getItemById(id: number | string): Promise<Item> {
-  const idFormatado = String(id).trim();
-
-  const response = await fetch(`${API}/${idFormatado}`);
+/** Faz a requisição e converte a resposta; lança erro com a mensagem dada se o status não for 2xx. */
+async function request<T>(
+  url: string,
+  mensagemDeErro: string,
+  init?: RequestInit,
+): Promise<T> {
+  const response = await fetch(url, {
+    ...init,
+    headers: { "Content-Type": "application/json", ...init?.headers },
+  });
 
   if (!response.ok) {
-    throw new Error("Item não encontrado");
+    throw new Error(`${mensagemDeErro} (HTTP ${response.status})`);
   }
 
-  return response.json();
+  // DELETE responde sem corpo em algumas versões do JSON Server.
+  const texto = await response.text();
+  return (texto ? JSON.parse(texto) : undefined) as T;
 }
 
-// Criar um item
-export async function createItem(item: Omit<Item, "id">): Promise<Item> {
-  const response = await fetch(API, {
+const urlDoItem = (id: string) => `${ITEMS_URL}/${encodeURIComponent(id.trim())}`;
+
+export function getItems(): Promise<Item[]> {
+  return request<Item[]>(ITEMS_URL, "Erro ao buscar itens");
+}
+
+export function getItemById(id: string): Promise<Item> {
+  return request<Item>(urlDoItem(id), "Item não encontrado");
+}
+
+export function createItem(item: NovoItem): Promise<Item> {
+  return request<Item>(ITEMS_URL, "Erro ao criar item", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(item),
   });
-
-  if (!response.ok) {
-    throw new Error("Erro ao criar item");
-  }
-
-  return response.json();
 }
 
-// Atualizar um item inteiro
-export async function updateItem(
-  id: number | string,
-  item: Item,
-): Promise<Item> {
-  const response = await fetch(`${API}/${id}`, {
+export function updateItem(id: string, item: Item): Promise<Item> {
+  return request<Item>(urlDoItem(id), "Erro ao atualizar item", {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(item),
   });
-
-  if (!response.ok) {
-    throw new Error("Erro ao atualizar item");
-  }
-  return response.json();
 }
 
-// Atualizar apenas alguns campos
-export async function patchItem(
-  id: number,
-  dados: Partial<Item>,
-): Promise<Item> {
-  const response = await fetch(`${API}/${id}`, {
+export function patchItem(id: string, dados: Partial<NovoItem>): Promise<Item> {
+  return request<Item>(urlDoItem(id), "Erro ao atualizar item", {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(dados),
   });
-
-  if (!response.ok) {
-    throw new Error("Erro ao atualizar item");
-  }
-
-  return response.json();
 }
 
-// Excluir um item
-export async function deleteItem(id: number | string): Promise<void> {
-  const response = await fetch(`${API}/${id}`, {
+export async function deleteItem(id: string): Promise<void> {
+  await request<unknown>(urlDoItem(id), "Erro ao excluir item", {
     method: "DELETE",
   });
-
-  if (!response.ok) {
-    throw new Error("Erro ao deletar item");
-  }
 }

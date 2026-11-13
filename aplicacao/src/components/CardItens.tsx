@@ -1,3 +1,4 @@
+import { formatarMoeda } from "../utils/formatarMoeda";
 import "../styles/cardItens.css";
 
 interface CardItensProps {
@@ -21,7 +22,7 @@ export default function CardItens({
             <div className="card-information">
                 <h2>{titulo}</h2>
                 <span>
-                    <p>R${valor},00</p>
+                    <p>{formatarMoeda(valor)}</p>
                     <div className="card-actions">
                         <button type="button" onClick={onEdit} aria-label="Editar item">
                             Editar

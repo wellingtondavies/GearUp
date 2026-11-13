@@ -1,0 +1,29 @@
+/* Estados do campo de foto que antes estavam como estilo inline nas páginas. */
+.upload-photo-container .upload-box--com-imagem {
+  padding: 0;
+  overflow: hidden;
+  border: none;
+}
+
+.upload-preview {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-preview-label {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}

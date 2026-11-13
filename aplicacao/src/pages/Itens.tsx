@@ -2,15 +2,13 @@ import { useEffect, useState } from "preact/hooks";
 import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 
-import caixasImg from "../assets/images/caixas.png";
-import parafusadeiraImg from "../assets/images/parafusadeira.jpg";
-import parafusadeira2Img from "../assets/images/parafusadeira2.jpg";
 import usuario from "../assets/images/iconeusuario.jpg";
 import logo from "../assets/svgs/logo.svg";
 
 import CardItens from "../components/CardItens";
 import { deleteItem, getItems } from "../services/itemService";
 import type { Item } from "../types/item";
+import { imagemPadrao } from "../utils/imagemPadrao";
 
 import "../styles/itens.css";
 import "../styles/utility.css";
@@ -18,20 +16,6 @@ import "../styles/utility.css";
 const Itens = (_props: RoutableProps) => {
   const [itens, setItens] = useState<Item[]>([]);
   const [carregando, setCarregando] = useState(true);
-
-  const getFallbackImage = (titulo: string) => {
-    const tituloNormalizado = titulo.trim().toLowerCase();
-
-    if (tituloNormalizado.includes("parafusadeira")) {
-      return parafusadeira2Img;
-    }
-
-    if (tituloNormalizado.includes("caixa")) {
-      return caixasImg;
-    }
-
-    return parafusadeiraImg;
-  };
 
   useEffect(() => {
     getItems()
@@ -94,7 +78,7 @@ const Itens = (_props: RoutableProps) => {
             itens.map((item) => (
               <CardItens
                 key={item.id}
-                imagem={item.imagem || getFallbackImage(item.titulo)}
+                imagem={item.imagem || imagemPadrao(item.titulo)}
                 titulo={item.titulo}
                 valor={item.valorDia}
                 onEdit={() => route(`/anuncio/editar/${item.id}`)}

@@ -1,97 +1,95 @@
 import { useEffect, useState } from "preact/hooks";
 import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
+import BackButton from "../components/BackButton";
+import ImageUpload from "../components/ImageUpload";
 import { getItemById, updateItem, deleteItem } from "../services/itemService";
 import type { Item } from "../types/item";
+import "../styles/add-item.css";
 import "../styles/edit-item.css";
 import "../styles/utility.css";
 
 interface EditItemProps extends RoutableProps {
   id?: string;
 }
-export default function EditItem(props: Readonly<EditItemProps>) {
-  console.log("O ID que o Preact Router leu da URL é:", props.id);
 
+export default function EditItem({ id }: Readonly<EditItemProps>) {
   const [itemCompleto, setItemCompleto] = useState<Item | null>(null);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [valorDia, setValorDia] = useState("");
   const [imagem, setImagem] = useState("");
-  const [loading, setLoading] = useState(true);
-  const handleImageChange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    if (target.files?.[0]) {
-      const file = target.files[0];
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setImagem(reader.result as string);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
+  const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
 
   useEffect(() => {
-    if (props.id) {
-      getItemById(props.id)
-        .then((dadosDoItem) => {
-          setItemCompleto(dadosDoItem);
-          setTitulo(dadosDoItem.titulo);
-          setDescricao(dadosDoItem.descricao);
-          setValorDia(String(dadosDoItem.valorDia));
-          setImagem(dadosDoItem.imagem || "");
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("Erro ao carregar dados do anúncio.");
-          globalThis.history.back();
-        });
-    }
-  }, [props.id]);
+    if (!id) return;
+
+    getItemById(id)
+      .then((item) => {
+        setItemCompleto(item);
+        setTitulo(item.titulo);
+        setDescricao(item.descricao);
+        setValorDia(String(item.valorDia));
+        setImagem(item.imagem ?? "");
+        setCarregando(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Erro ao carregar dados do anúncio.");
+        globalThis.history.back();
+      });
+  }, [id]);
 
   const handleSalvar = async (e: Event) => {
     e.preventDefault();
-    if (!props.id || !itemCompleto) return;
+    if (!id || !itemCompleto) return;
 
+    const valor = Number(valorDia);
+    if (!titulo.trim() || !descricao.trim() || !Number.isFinite(valor) || valor <= 0) {
+      alert("Preencha nome, descrição e um valor por dia maior que zero.");
+      return;
+    }
+
+    setSalvando(true);
     try {
-      const itemAtualizado: Item = {
+      await updateItem(id, {
         ...itemCompleto,
-        titulo,
-        descricao,
-        valorDia: Number(valorDia),
+        titulo: titulo.trim(),
+        descricao: descricao.trim(),
+        valorDia: valor,
         imagem: imagem || undefined,
-      };
-
-      await updateItem(props.id, itemAtualizado);
+      });
 
       alert("Alterações salvas com sucesso!");
       route("/itens");
     } catch (error) {
       console.error(error);
       alert("Não foi possível atualizar o anúncio.");
+    } finally {
+      setSalvando(false);
     }
   };
 
   const handleExcluir = async () => {
-    if (!props.id) return;
+    if (!id) return;
 
     const confirmar = globalThis.confirm(
       "Tem certeza de que deseja deletar permanentemente este anúncio?",
     );
-    if (confirmar) {
-      try {
-        await deleteItem(props.id);
-        alert("Anúncio removido com sucesso!");
-        route("/itens");
-      } catch (error) {
-        console.error(error);
-        alert("Erro ao tentar excluir.");
-      }
+    if (!confirmar) return;
+
+    try {
+      await deleteItem(id);
+      alert("Anúncio removido com sucesso!");
+      route("/itens");
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao tentar excluir.");
     }
   };
-  if (loading) {
+
+  if (carregando) {
     return (
       <div className="loading-screen">
         <p>Carregando dados do anúncio...</p>
@@ -102,96 +100,21 @@ export default function EditItem(props: Readonly<EditItemProps>) {
   return (
     <main className="edit-item-container">
       <header className="edit-item-header">
-        <button className="back-btn" onClick={() => globalThis.history.back()}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
+        <BackButton />
         <h1>Editar Anúncio</h1>
       </header>
 
       <section className="form-content">
         <form onSubmit={handleSalvar}>
-          <div className="upload-photo-container">
-            <input
-              type="file"
-              id="edit-file-upload"
-              accept="image/*"
-              className="sr-only"
-              onChange={handleImageChange}
-            />
-            <label
-              htmlFor="edit-file-upload"
-              className="upload-box-edit"
-              style={
-                imagem
-                  ? { padding: "0", overflow: "hidden", border: "none" }
-                  : {}
-              }
-            >
-              {imagem ? (
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "200px",
-                  }}
-                >
-                  <img
-                    src={imagem}
-                    alt="Foto do anúncio"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "10px",
-                      right: "10px",
-                      background: "rgba(0,0,0,0.6)",
-                      color: "white",
-                      padding: "4px 8px",
-                      borderRadius: "4px",
-                      fontSize: "0.75rem",
-                    }}
-                  >
-                    Trocar Imagem
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <svg
-                    width="48"
-                    height="48"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="upload-icon"
-                  >
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                  </svg>
-                  <h2>Sem foto anexada</h2>
-                  <p>Clique para adicionar uma imagem do PC</p>
-                </>
-              )}
-            </label>
-          </div>
+          <ImageUpload
+            id="edit-file-upload"
+            className="upload-box-edit"
+            imagem={imagem}
+            onChange={setImagem}
+            tituloVazio="Sem foto anexada"
+            textoVazio="Clique para adicionar uma imagem do PC"
+            textoTrocar="Trocar Imagem"
+          />
 
           <div className="form-group">
             <label htmlFor="nome-item">Nome do Item</label>
@@ -202,6 +125,7 @@ export default function EditItem(props: Readonly<EditItemProps>) {
               onInput={(e) => setTitulo((e.target as HTMLInputElement).value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="desc-item">Descrição</label>
             <textarea
@@ -219,14 +143,16 @@ export default function EditItem(props: Readonly<EditItemProps>) {
             <input
               id="valor-dia"
               type="number"
+              min="0.01"
+              step="0.01"
               value={valorDia}
               onInput={(e) => setValorDia((e.target as HTMLInputElement).value)}
             />
           </div>
 
           <div className="actions-group">
-            <button type="submit" className="btn-save">
-              Salvar Alterações
+            <button type="submit" className="btn-save" disabled={salvando}>
+              {salvando ? "Salvando..." : "Salvar Alterações"}
             </button>
             <button
               type="button"

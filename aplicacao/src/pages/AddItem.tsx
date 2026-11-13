@@ -1,6 +1,8 @@
 import { useState } from "preact/hooks";
 import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
+import BackButton from "../components/BackButton";
+import ImageUpload from "../components/ImageUpload";
 import { createItem } from "../services/itemService";
 import "../styles/add-item.css";
 import "../styles/utility.css";
@@ -9,142 +11,60 @@ const AddItem = (_props: RoutableProps) => {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [valorDia, setValorDia] = useState("");
-  const [loading, setLoading] = useState(false);
   const [imagem, setImagem] = useState("");
-  const handleImageChange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-
-    if (target.files?.[0]) {
-      const file = target.files[0];
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setImagem(reader.result as string);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
+  const [salvando, setSalvando] = useState(false);
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    if (!titulo || !descricao || !valorDia) {
+
+    const valor = Number(valorDia);
+    if (!titulo.trim() || !descricao.trim() || !valorDia) {
       alert("Por favor, preencha todos os campos!");
       return;
     }
+    if (!Number.isFinite(valor) || valor <= 0) {
+      alert("O valor por dia deve ser maior que zero.");
+      return;
+    }
 
+    setSalvando(true);
     try {
-      setLoading(false);
       await createItem({
-        titulo,
-        descricao,
-        valorDia: Number(valorDia),
+        titulo: titulo.trim(),
+        descricao: descricao.trim(),
+        valorDia: valor,
         disponivel: true,
+        imagem: imagem || undefined,
       });
 
       alert("Item anunciado com sucesso!");
-      route("/");
+      route("/itens");
     } catch (error) {
       console.error(error);
       alert("Houve um erro ao tentar criar o anúncio.");
     } finally {
-      setLoading(false);
+      setSalvando(false);
     }
   };
 
   return (
     <main className="add-item-container">
       <header className="add-item-header">
-        <button className="back-btn" onClick={() => globalThis.history.back()}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
+        <BackButton />
         <h1>Adicionar Item</h1>
       </header>
 
       <section className="form-content">
         <form onSubmit={handleSubmit}>
-          <div className="upload-photo-container">
-            <input
-              type="file"
-              id="file-upload"
-              accept="image/*"
-              className="sr-only"
-              onChange={handleImageChange}
-            />
-            <label
-              htmlFor="file-upload"
-              className="upload-box"
-              style={
-                imagem
-                  ? { padding: "0", overflow: "hidden", border: "none" }
-                  : {}
-              }
-            >
-              {imagem ? (
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "200px",
-                  }}
-                >
-                  <img
-                    src={imagem}
-                    alt="Preview"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "10px",
-                      right: "10px",
-                      background: "rgba(0,0,0,0.6)",
-                      color: "white",
-                      padding: "4px 8px",
-                      borderRadius: "4px",
-                      fontSize: "0.75rem",
-                    }}
-                  >
-                    Alterar Foto
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <svg
-                    width="48"
-                    height="48"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="upload-icon"
-                  >
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                  </svg>
-                  <h2>Incluir Foto</h2>
-                  <p>Clique para selecionar do seu PC</p>
-                </>
-              )}
-            </label>
-          </div>
+          <ImageUpload
+            id="file-upload"
+            className="upload-box"
+            imagem={imagem}
+            onChange={setImagem}
+            tituloVazio="Incluir Foto"
+            textoVazio="Clique para selecionar do seu PC"
+            textoTrocar="Alterar Foto"
+          />
 
           <div className="form-group">
             <label htmlFor="nome-item">Nome do Item</label>
@@ -175,14 +95,16 @@ const AddItem = (_props: RoutableProps) => {
             <input
               id="valor-dia"
               type="number"
+              min="0.01"
+              step="0.01"
               placeholder="50"
               value={valorDia}
               onInput={(e) => setValorDia((e.target as HTMLInputElement).value)}
             />
           </div>
 
-          <button type="submit" className="btn-submit" disabled={loading}>
-            {loading ? "Salvando..." : "Adicionar"}
+          <button type="submit" className="btn-submit" disabled={salvando}>
+            {salvando ? "Salvando..." : "Adicionar"}
           </button>
         </form>
       </section>

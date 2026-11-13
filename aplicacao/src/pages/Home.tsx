@@ -3,8 +3,6 @@ import { route } from "preact-router";
 import type { RoutableProps } from "preact-router";
 import "../styles/login.css";
 import "../styles/utility.css";
-// import type { FunctionComponent } from "preact";
-// import logo from "../assets/svgs/logo.svg";
 
 const Home = (_props: RoutableProps) => {
   return (
